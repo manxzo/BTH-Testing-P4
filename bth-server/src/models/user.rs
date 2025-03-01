@@ -22,3 +22,8 @@ pub struct UpdateUser {
     pub email: Option<String>,
     pub password: Option<String>,
 }
+#[derive(Deserialize)]
+pub struct LoginRequest {
+    pub email: String,
+    pub password: String,
+}

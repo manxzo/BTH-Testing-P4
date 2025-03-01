@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use crate::models::user::{CreateUser, UpdateUser};
+use crate::models::user::{CreateUser, UpdateUser,LoginRequest};
 use crate::models::user_queries::{insert_user, fetch_users, fetch_user_by_id, update_user_by_id, delete_user_by_id};
 use crate::middleware::auth::{generate_jwt, hash_password, verify_password, AuthMiddleware};
 use sqlx::PgPool;
@@ -25,7 +25,7 @@ pub async fn create_user(pool: web::Data<PgPool>, item: web::Json<CreateUser>) -
 }
 
 /// Login and get JWT token (POST /login)
-pub async fn login(pool: web::Data<PgPool>, item: web::Json<CreateUser>) -> impl Responder {
+pub async fn login(pool: web::Data<PgPool>, item: web::Json<LoginRequest>) -> impl Responder {
     let query = "SELECT id, password FROM users WHERE email = $1";
     match sqlx::query_as::<_, (i32, String)>(query)
         .bind(&item.email)
